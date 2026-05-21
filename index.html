@@ -2,6 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <!-- v=20260521-2 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fleet Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -292,7 +296,11 @@ try {
 // Firebase save/load
 function saveData(reg, data) {
   try {
-    if (db) db.ref('fleet/' + reg.replace(/[^a-zA-Z0-9]/g, '_')).set(data);
+    if (db) {
+      db.ref('fleet/' + reg.replace(/[^a-zA-Z0-9]/g, '_')).set(data)
+        .then(() => console.log('✅ Saved to Firebase:', reg))
+        .catch(e => console.error('❌ Firebase write error:', e.message, 'Data:', JSON.stringify(data).slice(0,200)));
+    }
     return true;
   } catch(e) {
     console.error('Firebase save error:', e);
